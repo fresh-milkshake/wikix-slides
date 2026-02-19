@@ -26,6 +26,7 @@
         --font-display: "Syne", "IBM Plex Sans", sans-serif;
         --font-text: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
         --font-mono: "IBM Plex Mono", "Fira Code", Menlo, monospace;
+        --fluid: min(1vw, 1.82vh);
       }
 
       * {
@@ -132,7 +133,7 @@
       .kicker {
         font-family: var(--font-mono);
         color: var(--accent);
-        font-size: 15px;
+        font-size: clamp(15px, calc(var(--fluid) * 1.35), 23px);
         font-weight: 500;
         letter-spacing: 0.14em;
         line-height: 1.25;
@@ -151,7 +152,7 @@
 
       h1 {
         font-family: var(--font-display);
-        font-size: clamp(3.5rem, 7vw, 6.8rem);
+        font-size: clamp(2.9rem, calc(var(--fluid) * 7.8), 8rem);
         font-weight: 700;
         letter-spacing: -0.025em;
         line-height: 1.03;
@@ -160,7 +161,7 @@
 
       h2 {
         font-family: var(--font-display);
-        font-size: clamp(2.7rem, 5vw, 4.8rem);
+        font-size: clamp(2.2rem, calc(var(--fluid) * 5.8), 5.8rem);
         font-weight: 600;
         letter-spacing: -0.018em;
         line-height: 1.08;
@@ -168,7 +169,7 @@
       }
 
       p {
-        font-size: clamp(1.34rem, 1.58vw, 1.82rem);
+        font-size: clamp(1.28rem, calc(var(--fluid) * 2.3), 2.15rem);
         font-weight: 400;
         color: var(--ink-soft);
         line-height: 1.58;
@@ -186,7 +187,7 @@
         border-radius: 999px;
         color: var(--ink);
         font-family: var(--font-mono);
-        font-size: 14px;
+        font-size: clamp(14px, calc(var(--fluid) * 1.25), 21px);
         font-weight: 500;
         letter-spacing: 0.01em;
         line-height: 1.25;
@@ -196,10 +197,14 @@
 
       .grid {
         display: grid;
-        gap: 18px;
-        grid-template-columns: repeat(2, minmax(320px, 380px));
-        width: fit-content;
+        gap: clamp(14px, calc(var(--fluid) * 0.95), 24px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: min(100%, clamp(46rem, 90vw, 92rem));
         max-width: 100%;
+      }
+
+      .grid > .card {
+        min-width: 0;
       }
 
       .card {
@@ -222,22 +227,12 @@
       }
 
       .card-icon {
-        width: auto;
-        height: auto;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        width: 38px;
+        height: 38px;
+        display: block;
         flex-shrink: 0;
-        border: none;
-        border-radius: 0;
-        background: transparent;
-      }
-
-      .card-icon svg {
-        width: 30px;
-        height: 30px;
-        stroke: var(--accent);
-        stroke-width: 2;
+        color: var(--accent);
+        stroke-width: 2.2;
         stroke-linecap: round;
         stroke-linejoin: round;
         fill: none;
@@ -245,14 +240,14 @@
 
       .card h3 {
         font-family: var(--font-display);
-        font-size: 1.44rem;
+        font-size: clamp(1.36rem, calc(var(--fluid) * 2.3), 2.1rem);
         font-weight: 600;
         letter-spacing: -0.01em;
         line-height: 1.16;
       }
 
       .card p {
-        font-size: 1.24rem;
+        font-size: clamp(1.2rem, calc(var(--fluid) * 2), 1.85rem);
         line-height: 1.5;
         max-width: 40ch;
       }
@@ -260,7 +255,7 @@
       .list {
         display: grid;
         gap: 14px;
-        font-size: clamp(1.3rem, 1.5vw, 1.62rem);
+        font-size: clamp(1.24rem, calc(var(--fluid) * 2.2), 2rem);
         line-height: 1.56;
         padding-left: 24px;
         text-align: left;
@@ -276,7 +271,7 @@
 
       .muted {
         color: var(--ink-soft);
-        font-size: 1.14rem;
+        font-size: clamp(1.08rem, calc(var(--fluid) * 1.55), 1.45rem);
       }
 
       .proof-list {
@@ -295,7 +290,7 @@
 
       .proof-item h3 {
         font-family: var(--font-display);
-        font-size: 1.36rem;
+        font-size: clamp(1.3rem, calc(var(--fluid) * 2.15), 2rem);
         font-weight: 600;
         letter-spacing: -0.01em;
         line-height: 1.16;
@@ -303,7 +298,7 @@
       }
 
       .proof-item p {
-        font-size: 1.16rem;
+        font-size: clamp(1.16rem, calc(var(--fluid) * 1.9), 1.75rem);
         line-height: 1.52;
         margin: 0;
         max-width: 62ch;
