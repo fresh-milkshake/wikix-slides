@@ -22,51 +22,33 @@
       html,
       body {
         margin: 0;
-        min-height: 100%;
+        width: 100%;
+        height: 100%;
         background: var(--bg);
         color: var(--ink);
         font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       }
 
       body {
-        display: grid;
-        grid-template-rows: auto 1fr auto;
-        gap: 16px;
-        padding: 18px;
-      }
-
-      .toolbar {
-        align-items: center;
-        display: flex;
-        gap: 12px;
-      }
-
-      .badge {
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        color: var(--ink-soft);
-        font-size: 12px;
-        letter-spacing: 0.08em;
-        padding: 4px 10px;
-        text-transform: uppercase;
+        overflow: hidden;
       }
 
       .deck {
-        align-items: center;
-        border: 1px solid var(--line);
-        border-radius: 12px;
+        background: var(--bg);
         display: grid;
         grid-template-rows: 1fr;
-        min-height: min(80vh, 760px);
+        width: 100vw;
+        height: 100vh;
         overflow: hidden;
         position: relative;
       }
 
       .slide {
         display: none;
+        width: 100%;
         height: 100%;
         margin: 0;
-        padding: clamp(22px, 3.8vw, 54px);
+        padding: clamp(24px, 4vw, 64px);
       }
 
       .slide.active {
@@ -156,42 +138,7 @@
         padding-left: 20px;
       }
 
-      .footer {
-        align-items: center;
-        color: var(--ink-soft);
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .controls {
-        display: flex;
-        gap: 8px;
-      }
-
-      button {
-        background: transparent;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        color: var(--ink);
-        cursor: pointer;
-        font: inherit;
-        min-width: 36px;
-        padding: 8px 10px;
-      }
-
-      button:hover {
-        border-color: var(--accent);
-      }
-
-      .hint {
-        font-size: 12px;
-      }
-
       @media (max-width: 920px) {
-        body {
-          padding: 12px;
-        }
-
         .grid {
           grid-template-columns: 1fr;
         }
@@ -199,11 +146,6 @@
     </style>
   </head>
   <body>
-    <div class="toolbar">
-      <span class="badge">wikix</span>
-      <span class="hint">Standalone deck. Use ←/→ keys.</span>
-    </div>
-
     <main class="deck" id="deck">
       <section class="slide active" data-title="Wikix">
         <p class="kicker">WIKIX</p>
@@ -283,20 +225,9 @@
       </section>
     </main>
 
-    <footer class="footer">
-      <div id="counter">1 / 5</div>
-      <div class="controls">
-        <button id="prev" type="button" aria-label="Previous slide">←</button>
-        <button id="next" type="button" aria-label="Next slide">→</button>
-      </div>
-    </footer>
-
     <script>
       (() => {
         const slides = Array.from(document.querySelectorAll(".slide"));
-        const counter = document.getElementById("counter");
-        const prev = document.getElementById("prev");
-        const next = document.getElementById("next");
         let index = 0;
 
         function clamp(value) {
@@ -309,9 +240,6 @@
           slides.forEach((slide, idx) => {
             slide.classList.toggle("active", idx === index);
           });
-          counter.textContent = `${index + 1} / ${slides.length}`;
-          prev.disabled = index === 0;
-          next.disabled = index === slides.length - 1;
         }
 
         function go(step) {
@@ -319,12 +247,16 @@
           render();
         }
 
-        prev.addEventListener("click", () => go(-1));
-        next.addEventListener("click", () => go(1));
-
         document.addEventListener("keydown", (event) => {
           if (event.key === "ArrowLeft") go(-1);
-          if (event.key === "ArrowRight" || event.key === " ") go(1);
+          if (event.key === "ArrowRight" || event.key === " " || event.key === "PageDown") {
+            event.preventDefault();
+            go(1);
+          }
+          if (event.key === "PageUp") {
+            event.preventDefault();
+            go(-1);
+          }
         });
 
         render();
