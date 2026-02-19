@@ -4,15 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Wikix Product Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --bg: #191919;
         --bg-elevated: #202020;
         --surface: #242424;
         --line: #373737;
-        --ink: rgba(255, 255, 255, 0.85);
-        --ink-soft: rgba(255, 255, 255, 0.58);
-        --accent: #2383e2;
+        --line-strong: #4a4a4a;
+        --glass: rgba(32, 32, 32, 0.2);
+        --glass-soft: rgba(36, 36, 36, 0.14);
+        --ink: rgba(255, 241, 218, 0.88);
+        --ink-soft: rgba(255, 241, 218, 0.72);
+        --accent: #fff1da;
+        --accent-soft: rgba(255, 241, 218, 0.14);
+        --font-display: "Syne", "IBM Plex Sans", sans-serif;
+        --font-text: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+        --font-mono: "IBM Plex Mono", "Fira Code", Menlo, monospace;
       }
 
       * {
@@ -26,7 +39,9 @@
         height: 100%;
         background: var(--bg);
         color: var(--ink);
-        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-family: var(--font-text);
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
       }
 
       body {
@@ -43,25 +58,84 @@
         position: relative;
       }
 
+      .deck::before,
+      .deck::after {
+        content: "";
+        position: absolute;
+        width: clamp(260px, 34vw, 560px);
+        height: clamp(260px, 34vw, 560px);
+        border-radius: 50%;
+        background: rgba(255, 241, 218, 0.07);
+        filter: blur(82px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .deck::before {
+        top: -14%;
+        left: -8%;
+        animation: drift-one 18s ease-in-out infinite alternate;
+      }
+
+      .deck::after {
+        right: -10%;
+        bottom: -20%;
+        animation: drift-two 24s ease-in-out infinite alternate;
+      }
+
       .slide {
-        display: none;
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
         margin: 0;
-        padding: clamp(24px, 4vw, 64px);
+        padding: clamp(30px, 5vw, 72px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(12px) scale(0.986);
+        transition: opacity 420ms ease, transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 420ms;
+        z-index: 1;
       }
 
       .slide.active {
-        display: grid;
-        gap: 16px;
-        align-content: start;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+        transition: opacity 420ms ease, transform 520ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0s;
+      }
+
+      .slide-content {
+        display: inline-grid;
+        width: fit-content;
+        max-width: 100%;
+        gap: 28px;
+        justify-items: start;
+        text-align: left;
+        background: transparent;
+        border: none;
+        border-radius: 18px;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: clamp(28px, 3.2vw, 52px);
+      }
+
+      .slide.active .slide-content {
+        animation: breathe 7s ease-in-out infinite;
       }
 
       .kicker {
+        font-family: var(--font-mono);
         color: var(--accent);
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 15px;
+        font-weight: 500;
         letter-spacing: 0.14em;
+        line-height: 1.25;
         margin: 0;
         text-transform: uppercase;
       }
@@ -76,71 +150,241 @@
       }
 
       h1 {
-        font-size: clamp(2rem, 5.4vw, 4rem);
-        letter-spacing: -0.03em;
+        font-family: var(--font-display);
+        font-size: clamp(3.5rem, 7vw, 6.8rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
         line-height: 1.03;
-        max-width: 16ch;
+        max-width: 13ch;
       }
 
       h2 {
-        font-size: clamp(1.6rem, 4.1vw, 2.9rem);
-        letter-spacing: -0.02em;
+        font-family: var(--font-display);
+        font-size: clamp(2.7rem, 5vw, 4.8rem);
+        font-weight: 600;
+        letter-spacing: -0.018em;
         line-height: 1.08;
-        max-width: 20ch;
+        max-width: 18ch;
       }
 
       p {
+        font-size: clamp(1.34rem, 1.58vw, 1.82rem);
+        font-weight: 400;
         color: var(--ink-soft);
-        line-height: 1.55;
-        max-width: 72ch;
+        line-height: 1.58;
+        max-width: 54ch;
       }
 
       .chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
       }
 
       .chip {
-        border: 1px solid var(--line);
+        border: 1px solid rgba(255, 241, 218, 0.22);
         border-radius: 999px;
         color: var(--ink);
-        font-size: 13px;
-        padding: 4px 10px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        line-height: 1.25;
+        padding: 6px 12px;
+        background: var(--accent-soft);
       }
 
       .grid {
         display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        grid-template-columns: repeat(2, minmax(320px, 380px));
+        width: fit-content;
+        max-width: 100%;
       }
 
       .card {
-        background: var(--surface);
-        border: 1px solid var(--line);
-        border-radius: 10px;
+        background: transparent;
+        border: none;
+        border-radius: 12px;
         display: grid;
-        gap: 8px;
-        padding: 14px;
+        gap: 12px;
+        padding: 20px;
+      }
+
+      .card-title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .card-title h3 {
+        margin: 0;
+      }
+
+      .card-icon {
+        width: auto;
+        height: auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .card-icon svg {
+        width: 30px;
+        height: 30px;
+        stroke: var(--accent);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
       }
 
       .card h3 {
-        font-size: 16px;
+        font-family: var(--font-display);
+        font-size: 1.44rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.16;
       }
 
       .card p {
-        font-size: 14px;
+        font-size: 1.24rem;
+        line-height: 1.5;
+        max-width: 40ch;
       }
 
       .list {
         display: grid;
+        gap: 14px;
+        font-size: clamp(1.3rem, 1.5vw, 1.62rem);
+        line-height: 1.56;
+        padding-left: 24px;
+        text-align: left;
+      }
+
+      .list li::marker {
+        color: var(--accent);
+      }
+
+      .accent {
+        color: var(--accent);
+      }
+
+      .muted {
+        color: var(--ink-soft);
+        font-size: 1.14rem;
+      }
+
+      .proof-list {
+        display: grid;
         gap: 10px;
-        padding-left: 20px;
+      }
+
+      .proof-item {
+        border: none;
+        border-radius: 12px;
+        background: transparent;
+        display: grid;
+        gap: 8px;
+        padding: 16px 18px;
+      }
+
+      .proof-item h3 {
+        font-family: var(--font-display);
+        font-size: 1.36rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.16;
+        margin: 0;
+      }
+
+      .proof-item p {
+        font-size: 1.16rem;
+        line-height: 1.52;
+        margin: 0;
+        max-width: 62ch;
+      }
+
+      .accent-underline {
+        text-decoration: underline;
+        text-decoration-color: var(--accent);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+      }
+
+      code {
+        background: var(--accent-soft);
+        border: 1px solid rgba(255, 241, 218, 0.2);
+        border-radius: 6px;
+        color: var(--ink);
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+        font-weight: 500;
+        padding: 2px 7px;
+      }
+
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: none;
+          opacity: 0.97;
+        }
+        50% {
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @keyframes drift-one {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(6vw, 4vh, 0);
+        }
+      }
+
+      @keyframes drift-two {
+        0% {
+          transform: translate3d(0, 0, 0);
+        }
+        100% {
+          transform: translate3d(-7vw, -5vh, 0);
+        }
       }
 
       @media (max-width: 920px) {
+        .slide-content {
+          width: 100%;
+          max-width: 100%;
+          gap: 22px;
+          padding: 24px;
+        }
+
         .grid {
+          width: 100%;
           grid-template-columns: 1fr;
+        }
+
+        .deck::before,
+        .deck::after {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slide,
+        .slide.active,
+        .slide-content,
+        .deck::before,
+        .deck::after {
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
         }
       }
     </style>
@@ -148,85 +392,206 @@
   <body>
     <main class="deck" id="deck">
       <section class="slide active" data-title="Wikix">
-        <p class="kicker">WIKIX</p>
-        <h1>A practical wiki for teams that ship.</h1>
-        <p>
-          Markdown and MDX at the core, predictable routing, and an editing flow that stays simple as your project
-          grows.
-        </p>
-        <div class="chips">
-          <span class="chip">Single wiki per deployment</span>
-          <span class="chip">Root-relative URLs</span>
-          <span class="chip">Atomic content writes</span>
+        <div class="slide-content">
+          <h1>Your docs can ship in the same flow as your code.</h1>
+          <p>
+            Wikix is a practical wiki for <span class="accent-underline">release-heavy teams</span> who are tired of
+            fixing docs after release day.
+          </p>
+          <div class="chips">
+            <span class="chip">Markdown/MDX as source of truth</span>
+            <span class="chip">Canonical / and /{slug} routes</span>
+            <span class="chip">Proposal-first publishing</span>
+          </div>
+          <p class="muted">Built as a pet project around one idea: docs should feel like part of delivery, not cleanup.</p>
         </div>
       </section>
 
       <section class="slide" data-title="Problem">
-        <h2>Why teams delay documentation</h2>
-        <ul class="list">
-          <li>Wiki setup often becomes a parallel engineering task.</li>
-          <li>Writers and maintainers end up with different workflows.</li>
-          <li>Publishing can hide where the source of truth actually lives.</li>
-        </ul>
+        <div class="slide-content">
+          <h2>The gap we keep seeing in fast teams</h2>
+          <ul class="list">
+            <li>Code is reviewed and merged, but docs wait in another tool and ship later.</li>
+            <li>People lose time on handoffs: edit here, copy there, reformat, republish.</li>
+            <li>Onboarding pages and runbooks quietly drift after each release cycle.</li>
+          </ul>
+          <p class="muted">The real cost is context switching, rework, and avoidable production confusion.</p>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Workflow">
+        <div class="slide-content">
+          <h2>How Wikix keeps the flow simple</h2>
+          <ol class="list">
+            <li>Edit docs directly in <code>.md</code>/<code>.mdx</code> files.</li>
+            <li>Open a proposal and review with explicit role gates.</li>
+            <li>Publish with atomic writes and keep search in sync.</li>
+          </ol>
+          <p class="muted">No hidden wiki namespace. No extra format. No custom publish glue.</p>
+        </div>
       </section>
 
       <section class="slide" data-title="Model">
-        <h2>Wikix keeps the model straightforward</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Content</h3>
-            <p>Pages are normal <code>.md</code> and <code>.mdx</code> files in one wiki root.</p>
-          </article>
-          <article class="card">
-            <h3>Routing</h3>
-            <p>Homepage is <code>/</code>, pages are <code>/{slug}</code>, no wiki prefixes.</p>
-          </article>
-          <article class="card">
-            <h3>Control</h3>
-            <p>RBAC, audit trail, and operational sync/reindex paths are built in.</p>
-          </article>
-          <article class="card">
-            <h3>Publish</h3>
-            <p>Atomic write flow keeps deployed docs stable and reviewable.</p>
-          </article>
+        <div class="slide-content">
+          <h2>Product model in one view</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="file-text" aria-hidden="true"></i>
+                <h3>File-native content</h3>
+              </div>
+              <p>Pages stay in <code>.md</code>/<code>.mdx</code>, so ownership and history remain clear in existing workflows.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="route" aria-hidden="true"></i>
+                <h3>Predictable URLs</h3>
+              </div>
+              <p>Homepage is <code>/</code>, pages are <code>/{slug}</code>, and legacy <code>/wikis/*</code> stays redirect-only.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="shield-check" aria-hidden="true"></i>
+                <h3>Controlled publishing</h3>
+              </div>
+              <p>RBAC roles, required comments for key actions, and audit events make publishing accountable.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="settings-2" aria-hidden="true"></i>
+                <h3>Reliable operations</h3>
+              </div>
+              <p>Atomic writes plus sync/reindex flows keep filesystem state and search index aligned.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Differentiation">
+        <div class="slide-content">
+          <h2>Why this is different from a generic docs stack</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="workflow" aria-hidden="true"></i>
+                <h3>Typical setup</h3>
+              </div>
+              <p>Many teams end up with several tools, manual handoffs, and brittle publishing glue.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="layers-3" aria-hidden="true"></i>
+                <h3>Wikix</h3>
+              </div>
+              <p>One contract: markdown/MDX source, predictable routing, proposal flow, and built-in ops controls.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="rocket" aria-hidden="true"></i>
+                <h3>Best fit today</h3>
+              </div>
+              <p>Teams with frequent releases that need docs to move with code, not after it.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="scale" aria-hidden="true"></i>
+                <h3>Reality check</h3>
+              </div>
+              <p>Wikix does not replace discipline. It makes a good documentation process easier to enforce.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Proof">
+        <div class="slide-content">
+          <h2>What already exists in the product</h2>
+          <div class="proof-list">
+            <article class="proof-item">
+              <h3>Routing contract</h3>
+              <p>Single wiki per deployment, canonical <code>/</code> and <code>/{slug}</code>, legacy path kept as redirect-only.</p>
+            </article>
+            <article class="proof-item">
+              <h3>Publish contract</h3>
+              <p>Proposal-first flow with role gates, audit log, and atomic writes for content updates.</p>
+            </article>
+            <article class="proof-item">
+              <h3>Operations contract</h3>
+              <p>BFF API proxy plus sync/reindex paths for safe recovery after manual file edits.</p>
+            </article>
+          </div>
         </div>
       </section>
 
       <section class="slide" data-title="Audience">
-        <h2>Who benefits first</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Game and mod teams</h3>
-            <p>Ship patch notes, lore, and onboarding pages without overhead.</p>
-          </article>
-          <article class="card">
-            <h3>Smaller open-source projects</h3>
-            <p>Keep architecture and contributor docs close to the code workflow.</p>
-          </article>
-          <article class="card">
-            <h3>Internal tooling teams</h3>
-            <p>Run private docs with clear role boundaries and predictable behavior.</p>
-          </article>
-          <article class="card">
-            <h3>AI-assisted workflows</h3>
-            <p>Markdown-first structure stays machine-friendly and easy to automate later.</p>
-          </article>
+        <div class="slide-content">
+          <h2>Who gets value first (current hypothesis)</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="gamepad-2" aria-hidden="true"></i>
+                <h3>Game and mod teams</h3>
+              </div>
+              <p>Patch notes, lore, and player guides that should stay aligned with frequent updates.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="code-2" aria-hidden="true"></i>
+                <h3>Smaller OSS projects</h3>
+              </div>
+              <p>Architecture docs and contributor guidance reviewed in a familiar, Git-native flow.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="server" aria-hidden="true"></i>
+                <h3>Internal platform teams</h3>
+              </div>
+              <p>Private operational docs where explicit permissions and auditability matter.</p>
+            </article>
+            <article class="card">
+              <div class="card-title">
+                <i class="card-icon" data-lucide="bot" aria-hidden="true"></i>
+                <h3>Early AI-enabled teams</h3>
+              </div>
+              <p>Markdown/MDX structure is easier for assistants to read and draft against, with humans in control.</p>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="slide" data-title="Rollout">
-        <h2>Rollout in one sprint</h2>
-        <ol class="list">
-          <li>Bootstrap wiki and seed current markdown pages.</li>
-          <li>Set maintainer/contributor/reader roles.</li>
-          <li>Capture consistent product screenshots for docs and social posts.</li>
-        </ol>
-        <p>Wikix is focused on being easy to run, easy to reason about, and easy to extend.</p>
+      <section class="slide" data-title="Pilot">
+        <div class="slide-content">
+          <h2>14-day pilot that proves real value</h2>
+          <ol class="list">
+            <li><strong>Days 1-3:</strong> bootstrap one wiki and import existing markdown pages.</li>
+            <li><strong>Days 4-8:</strong> configure contributor/maintainer roles and run proposal reviews.</li>
+            <li><strong>Days 9-14:</strong> publish one real release cycle through the same workflow.</li>
+          </ol>
+          <p class="muted">Success signals: fewer manual handoffs, cleaner review trail, and docs updated in the release window.</p>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Roadmap">
+        <div class="slide-content">
+          <h2>AI roadmap, with guardrails</h2>
+          <ul class="list">
+            <li><strong>Now:</strong> human-led publishing with RBAC and audit controls.</li>
+            <li><strong>Next:</strong> read-focused assistant context over pages and search.</li>
+            <li><strong>Later (gated):</strong> assistant-created proposal drafts through existing review rules.</li>
+          </ul>
+          <p>No autonomous direct publish is planned before policy gates and safety checks are proven in practice.</p>
+          <p class="muted">If this feels like your team: start with one repo, one docs stream, and one release cycle.</p>
+        </div>
       </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>
       (() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+
         const slides = Array.from(document.querySelectorAll(".slide"));
         let index = 0;
 
