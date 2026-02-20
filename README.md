@@ -1,11 +1,5 @@
 # Wikix Slides
 
-Standalone product presentation for Wikix.
+Standalone simple presentation for my Wikix project.
 
-## Files
-
-- `index.html` — presentation deck
-
-## Run locally
-
-Open `index.html` directly in a browser.
+Based on icons from Lucide and Reveal.js, with a little bit of customization.
